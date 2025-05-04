@@ -1,0 +1,46 @@
+server {
+
+    listen 80;
+    server_name 10.0.2.15;
+
+    location /api/ {
+        # Эта команда определяет, куда нужно перенаправить запрос.
+        proxy_pass http://127.0.0.1:8000;
+    }
+
+    location /admin/ {
+        proxy_pass http://127.0.0.1:8000;
+    }
+    
+    location / {
+        root   /var/www/taski;
+        index  index.html index.htm;
+        try_files $uri /index.html;
+    }
+
+}
+
+server {
+
+    listen 80;
+    server_name infra.example.com;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:8080;
+    }
+    
+    location /admin/ {
+        proxy_pass http://127.0.0.1:8080;
+    }
+
+    location /media/ {
+	alias /var/www/infra_sprint1/media;
+    }
+
+    location / {
+        root   /var/www/infra_sprint1;
+        index  index.html index.htm;
+        try_files $uri /index.html;
+    }
+
+}
